@@ -1,0 +1,15 @@
+{
+  "_comment": "复制本文件为 config.local.json 并填入真实凭证。config.local.json 已在 .gitignore 中，不会入库。",
+  "_comment_env": "也可以完全跳过本文件，直接用环境变量 ANTHROPIC_BASE_URL / ANTHROPIC_AUTH_TOKEN / ANTHROPIC_MODEL 覆盖。",
+
+  "baseUrl": "https://api.anthropic.com",
+  "authToken": "sk-ant-...",
+  "model": "claude-opus-5",
+
+  "maxTokens": 2000,
+  "timeoutMs": 45000,
+  "temperature": 0.3,
+
+  "_comment_scoring": "话术评分引擎。llm = 调用大模型；local = 纯本地规则引擎；auto = 优先大模型，调用失败自动降级到本地规则。",
+  "scoringEngine": "auto"
+}

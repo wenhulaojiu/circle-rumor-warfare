@@ -1,0 +1,17 @@
+{
+  "name": "circle-rumor-warfare",
+  "version": "1.0.0",
+  "description": "圈层谣言攻防战 —— 四圈层交叉社交关系网上的信息对抗网页游戏",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node tools/check-layout.js",
+    "smoke": "node tools/dom-smoke.js",
+    "sweep": "node tools/sweep.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
