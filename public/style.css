@@ -1,15 +1,14 @@
 /* ══════════════════════════════════════════════════════════════════
-   圈层谣言攻防战 —— 样式表
+   圈层谣言攻防战 —— 样式表（极简中性版）
 
-   配色说明（这是按数据可视化规范跑过校验的一组值，不要随手改）：
+   配色原则：整个界面只有「中性灰白 + 两个语义色」。
 
-   · 三条折线系列用分类色板前三槽：蓝 #3987e5 / 橙 #d95926 / 青 #199e70，
-     在深色画布 #161922 上通过了全配对色盲检查（最差 CVD ΔE 9.4）。
-   · 四类节点状态是"状态色"而非"系列色"，固定不参与主题化：
-     灰 #8b93a1 / 黄 #fab219 / 红 #e66767 / 绿 #0ca30c。
-     红↔绿在红绿色盲下 ΔE 只有 7.1（警戒带）—— 因此**颜色绝不单独承载语义**：
-     节点用形状区分（空心环 / 半填充 / 实心+! / 实心+✓），
-     每条进度条都带形状标记 + 文字标签 + 数值，色盲用户和黑白打印都能读。
+   · 红绿是游戏的核心语言：红=谣言方/已相信，绿=辟谣方/已免疫。
+     红 #e66767 / 绿 #0ca30c，配形状通道（空心/半填充/实心+!/实心+✓）
+     与文字标签，色盲与黑白打印都可读。黄 #fab219 仅用于「事件/警示」。
+   · 折线图三条系列改用灰阶 + 线型（实线/虚线/点线）双通道区分，
+     不再占用色相。
+   · 交互色一律中性白（--accent），圈层底壳统一一种中性色。
    ══════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -30,10 +29,10 @@
   --border:       rgba(255, 255, 255, 0.10);
   --border-strong:rgba(255, 255, 255, 0.18);
 
-  /* 分类系列色（折线图专用） */
-  --series-1:     #3987e5;  /* 即时影响深度 */
-  --series-2:     #d95926;  /* 时间留存长度 */
-  --series-3:     #199e70;  /* 破圈传播广度 */
+  /* 分类系列色：灰阶三档 + 线型区分（见折线图渲染） */
+  --series-1:     #e8eaf0;  /* 即时影响深度 — 实线 */
+  --series-2:     #9aa3b2;  /* 时间留存长度 — 虚线 */
+  --series-3:     #5f6875;  /* 破圈传播广度 — 点线 */
 
   /* 状态色（节点状态专用，永不挪作他用） */
   --st-gray:      #8b93a1;
@@ -41,8 +40,11 @@
   --st-red:       #e66767;
   --st-green:     #0ca30c;
 
-  --accent:       #3987e5;
-  --accent-ink:   #ffffff;
+  /* 圈层底壳统一中性色 */
+  --zone:         #7a8494;
+
+  --accent:       #e8eaf0;  /* 交互色 = 中性白 */
+  --accent-ink:   #16181d;  /* 白底按钮上的深色文字 */
 
   --radius:       10px;
   --radius-lg:    14px;
@@ -95,7 +97,7 @@ button { font-family: inherit; }
   color: var(--accent-ink);
   font-weight: 600;
 }
-.btn-primary:hover:not(:disabled) { background: #4d97ea; border-color: #4d97ea; }
+.btn-primary:hover:not(:disabled) { background: #f4f6fa; border-color: #f4f6fa; }
 
 .btn-ghost { background: transparent; }
 .btn-ghost:hover:not(:disabled) { background: var(--surface-3); }
@@ -196,10 +198,7 @@ button { font-family: inherit; }
   flex: 1;
   min-height: 680px;
   min-height: 0;
-  background:
-    radial-gradient(1100px 620px at 26% 22%, rgba(57,135,229,.055), transparent 62%),
-    radial-gradient(1100px 620px at 76% 74%, rgba(25,158,112,.05), transparent 62%),
-    var(--plane);
+  background: var(--plane);
   overflow: hidden;
 }
 
@@ -322,7 +321,7 @@ button { font-family: inherit; }
 .action-title strong { font-size: 13.5px; }
 .action-sub { color: var(--ink-muted); font-size: 12px; margin-left: 9px; }
 
-.target-guide { margin: 10px 0; padding: 9px 11px; border: 1px solid var(--border); border-radius: 9px; background: rgba(57,135,229,.06); }
+.target-guide { margin: 10px 0; padding: 9px 11px; border: 1px solid var(--border); border-radius: 9px; background: rgba(255,255,255,.045); }
 .target-guide > strong { font-size: 12px; color: var(--ink-2); }
 .target-guide-list { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 7px; }
 .target-guide-item { border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-2); border-radius: 7px; padding: 5px 8px; text-align: left; cursor: pointer; font-size: 11px; }
@@ -331,7 +330,7 @@ button { font-family: inherit; }
 .target-guide-item span { color: var(--ink-muted); font-size: 10px; }
 .tone-row { display:flex; align-items:center; gap:5px; margin-top:6px; font-size:11px; color:var(--ink-muted); }
 .tone-row button { border:1px solid var(--border); background:var(--surface-3); color:var(--ink-2); border-radius:5px; padding:2px 7px; cursor:pointer; font-size:11px; }
-.tone-row button.active { border-color:var(--accent); background:rgba(57,135,229,.2); color:var(--ink); }
+.tone-row button.active { border-color:var(--accent); background:rgba(255,255,255,.14); color:var(--ink); }
 .tone-row em { margin-left:auto; font-style:normal; color:var(--ink-muted); font-size:10px; }
 .settle-cause { margin-top:5px; color:var(--ink-muted); font-size:10.5px; }
 .ai-intent { color:var(--st-yellow); font-size:11px; white-space:nowrap; }
@@ -388,8 +387,8 @@ button { font-family: inherit; }
   min-width: 0;
 }
 .slot.filled { border-color: var(--border-strong); }
-.slot.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(57,135,229,.18); }
-.slot.active-target { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(57,135,229,.22); }
+.slot.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,255,255,.16); }
+.slot.active-target { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,255,255,.22); }
 
 .slot-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .slot-idx {
@@ -505,7 +504,15 @@ button { font-family: inherit; }
 /* ── 折线图 ── */
 .chart-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-bottom: 8px; }
 .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-2); }
-.chart-legend-swatch { width: 14px; height: 2.5px; border-radius: 2px; flex: 0 0 auto; }
+.chart-legend-swatch { width: 18px; height: 3px; border-radius: 2px; flex: 0 0 auto; }
+/* 系列靠「灰阶 + 线型」双通道区分，与折线 dash 一一对应 */
+.chart-legend-swatch[data-series="0"] { background: var(--series-1); }
+.chart-legend-swatch[data-series="1"] { background: repeating-linear-gradient(90deg, var(--series-2) 0 5px, transparent 5px 9px); }
+.chart-legend-swatch[data-series="2"] {
+  background: radial-gradient(circle, var(--series-3) 1.5px, transparent 1.6px);
+  background-size: 7px 100%;
+  background-repeat: repeat-x;
+}
 
 .chart-wrap { position: relative; }
 .line-chart { display: block; width: 100%; height: 172px; overflow: visible; }
@@ -564,7 +571,7 @@ button { font-family: inherit; }
   font-size: 10px; font-weight: 700; letter-spacing: .4px;
   padding: 1px 6px; border-radius: 4px; flex: 0 0 auto;
 }
-.settle-who[data-who="player"] { background: rgba(57,135,229,.18); color: #7fb4f0; }
+.settle-who[data-who="player"] { background: rgba(255,255,255,.13); color: #dfe3ea; }
 .settle-who[data-who="ai"]     { background: rgba(255,255,255,.07); color: var(--ink-muted); }
 .settle-node { font-weight: 600; font-size: 12px; }
 .settle-tactic {
@@ -589,7 +596,7 @@ button { font-family: inherit; }
 .badge { font-size: 10px; padding: 1.5px 7px; border-radius: 999px; border: 1px solid; }
 .badge-warn { color: var(--st-yellow); border-color: rgba(250,178,25,.45); background: rgba(250,178,25,.1); }
 .badge-ok   { color: var(--st-green);  border-color: rgba(12,163,12,.45);  background: rgba(12,163,12,.1); }
-.badge-llm  { color: #7fb4f0;          border-color: rgba(57,135,229,.45); background: rgba(57,135,229,.1); }
+.badge-llm  { color: var(--ink-2);          border-color: var(--border-strong);     background: rgba(255,255,255,.06); }
 
 /* ── 日志 ── */
 .log { display: flex; flex-direction: column; gap: 7px; max-height: 230px; overflow-y: auto; }
@@ -679,7 +686,7 @@ button { font-family: inherit; }
   transition: border-color .15s, background .15s;
 }
 .topic-option:hover { background: var(--surface-3); }
-.topic-option[aria-pressed="true"] { border-color: var(--accent); background: rgba(57,135,229,.09); }
+.topic-option[aria-pressed="true"] { border-color: var(--accent); background: rgba(255,255,255,.06); }
 .topic-name { font-size: 12.5px; font-weight: 600; line-height: 1.5; }
 .topic-source { display: block; color: var(--accent); font-size: 10.5px; margin-top: 4px; }
 .topic-brief {
@@ -736,7 +743,7 @@ button { font-family: inherit; }
   font-size: 11.5px; padding: 6px 14px; border-radius: 999px; border: 1px solid;
   display: flex; align-items: center; gap: 7px;
 }
-.cov-pill[data-hit="true"]  { border-color: rgba(57,135,229,.5); background: rgba(57,135,229,.1); color: #8cbcf4; }
+.cov-pill[data-hit="true"]  { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.08); color: #dfe3ea; }
 .cov-pill[data-hit="false"] { border-color: var(--border); color: var(--ink-muted); }
 
 .score-bar {
@@ -802,7 +809,7 @@ body.precise-on .precise {
 .fuzzy {
   color: var(--ink-2);
   font-weight: 600;
-  border-bottom: 1px dashed rgba(57, 135, 229, .36);
+  border-bottom: 1px dashed rgba(255, 255, 255, .3);
   padding-bottom: 1px;
 }
 
@@ -820,49 +827,31 @@ body.precise-on .precise {
 /* 键盘导航焦点：一圈主色描边，看得见才敢用 Tab */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-/* 顶栏：细渐变 + 底部高光 */
-.topbar {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .03), transparent 42%),
-    var(--surface);
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .04);
-}
+/* 顶栏：纯色面板 */
+.topbar { background: var(--surface); }
 
-/* 品牌：符号加呼吸光，字标做一点金属感 */
-.brand-mark { filter: drop-shadow(0 0 6px rgba(230, 103, 103, .35)); }
-.brand-name {
-  background: linear-gradient(180deg, #ffffff, #b4b8c4);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+/* 品牌：无光效，纯白字标 */
+.brand-mark { filter: none; }
+.brand-name { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--ink); }
 
-/* 卡片：上高光描边 + 更柔的投影，面板感 */
+/* 卡片：纯色面板 + 极轻投影 */
 .card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .022), transparent 46%),
-    var(--surface);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .045),
-    0 6px 18px rgba(0, 0, 0, .28);
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .22);
 }
 
-/* 主按钮：微光晕，hover 更亮 */
-.btn-primary {
-  box-shadow: 0 0 0 1px rgba(57, 135, 229, .25), 0 6px 16px rgba(57, 135, 229, .2);
-}
-.btn-primary:hover:not(:disabled) {
-  box-shadow: 0 0 0 1px rgba(57, 135, 229, .4), 0 8px 22px rgba(57, 135, 229, .3);
-}
+/* 主按钮：白底深字，无光晕 */
+.btn-primary { box-shadow: none; }
+.btn-primary:hover:not(:disabled) { box-shadow: none; }
 
-/* 槽位输入框聚焦：霓虹描边 */
+/* 槽位输入框聚焦：一圈白描边即可 */
 .slot textarea:focus {
-  box-shadow: 0 0 0 1px var(--accent), 0 0 14px rgba(57, 135, 229, .16);
+  box-shadow: none;
 }
 
-/* 模态：更深的纵深投影 */
+/* 模态：单层投影 */
 .modal {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 30px 90px rgba(0, 0, 0, .7);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
 }
 
 /* Editorial report refresh: warm paper, dark plum, generous whitespace */

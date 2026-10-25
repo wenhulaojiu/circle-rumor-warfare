@@ -22,20 +22,21 @@ const STATE_META = {
 };
 const STATE_ORDER = ['red', 'yellow', 'green', 'gray'];
 
-/** 三个态势维度：与 src/scoring.js 的三维一一对应 */
+/** 三个态势维度：与 src/scoring.js 的三维一一对应。
+ *  系列靠「灰阶 + 线型」双通道区分，不占用色相 —— 色相只留给红绿游戏语义。 */
 const SERIES = [
-  { key: 'impact',    name: '即时影响深度', fallback: '#3987e5' },
-  { key: 'retention', name: '时间留存长度', fallback: '#d95926' },
-  { key: 'spread',    name: '破圈传播广度', fallback: '#199e70' },
+  { key: 'impact',    name: '即时影响深度', fallback: '#e8eaf0', dash: '' },
+  { key: 'retention', name: '时间留存长度', fallback: '#9aa3b2', dash: '7 5' },
+  { key: 'spread',    name: '破圈传播广度', fallback: '#5f6875', dash: '2 4' },
 ];
 
-/** 四个圈层的底色。刻意避开红/黄/绿/灰 —— 那四个色位被节点状态占用了，
- *  圈层壳再用相近色相会让人以为壳的颜色也在表达某种状态。 */
+/** 四个圈层的底色统一为一种中性色：圈层身份靠位置和圈名表达，
+ *  不用颜色 —— 颜色只属于节点状态（红/绿）与事件（黄）。 */
 const CIRCLE_TINT = {
-  interest:  '#3987e5',
-  parent:    '#a855f7',
-  workplace: '#14b8a6',
-  campus:    '#ec4899',
+  interest:  '#7a8494',
+  parent:    '#7a8494',
+  workplace: '#7a8494',
+  campus:    '#7a8494',
 };
 
 const MAX_TEXT = 200;
@@ -1212,7 +1213,7 @@ function renderChart() {
   // ---- 图例（两个以上系列必须有图例，颜色不能是唯一的身份线索）----
   els.chartLegend.innerHTML = SERIES.map((s, i) => `
     <span class="chart-legend-item">
-      <span class="chart-legend-swatch" style="background:${series[i]}"></span>${s.name}
+      <span class="chart-legend-swatch" data-series="${i}"></span>${s.name}
     </span>`).join('');
 
   // 横轴按**数据点序号**而不是回合号来排。
@@ -1242,18 +1243,20 @@ function renderChart() {
   if (!chartData.length) {
     add('text', { x: W / 2, y: H / 2, 'text-anchor': 'middle', fill: C.inkMuted, 'font-size': 11.5 }, '提交第一个回合后开始记录');
   } else {
-    // ---- 三条线 ----
+    // ---- 三条线（灰阶 + 实线/虚线/点线双通道区分）----
     for (let i = 0; i < SERIES.length; i++) {
       const s = SERIES[i];
       const pts = chartData.map((d, k) => [x(k), y(d[s.key] ?? 0)]);
-      add('path', {
+      const attrs = {
         d: pts.map((p, k) => `${k ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' '),
         fill: 'none',
         stroke: series[i],
         'stroke-width': 2,
         'stroke-linejoin': 'round',
         'stroke-linecap': 'round',
-      });
+      };
+      if (s.dash) attrs['stroke-dasharray'] = s.dash;
+      add('path', attrs);
     }
 
     // ---- 只在最后一个点上做直接标注，不是每个点都写数字 ----
@@ -1311,7 +1314,7 @@ function renderChart() {
         <div class="chart-tip-title">${idx === 0 ? '开局状态' : `第 ${d.round} 回合后`}</div>
         ${SERIES.map((s, i) => `
           <div class="chart-tip-row">
-            <span class="chart-legend-swatch" style="background:${series[i]}"></span>
+            <span class="chart-legend-swatch" data-series="${i}"></span>
             <span class="chart-tip-name">${s.name}</span>
             <span class="chart-tip-val">${tipVal(d[s.key] ?? 0)}</span>
           </div>`).join('')}
