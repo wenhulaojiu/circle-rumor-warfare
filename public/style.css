@@ -840,7 +840,7 @@ body.precise-on .precise {
   box-shadow: 0 4px 14px rgba(0, 0, 0, .22);
 }
 
-/* 主按钮：白底深字，无光晕 */
+/* 主按钮：金底深字，无光晕（金色 accent 由文末编辑部主题块定义） */
 .btn-primary { box-shadow: none; }
 .btn-primary:hover:not(:disabled) { box-shadow: none; }
 
@@ -883,7 +883,7 @@ h1, h2, h3, .modal-title, .card-title, .action-title strong, .brand-name { font-
 .btn-primary:hover:not(:disabled) { background: #f2c968; border-color: #f2c968; box-shadow: none; }
 .btn-lg { border-radius: 2px; padding: 13px 28px; }
 .layout { height: calc(100vh - 68px); grid-template-columns: minmax(0, 1fr) 340px; }
-.graph-stage { background: radial-gradient(900px 500px at 30% 20%, rgba(217,76,134,.08), transparent 62%), var(--plane); }
+.graph-stage { background: var(--plane); }
 .legend, .node-card, .graph-status { background: rgba(40,23,25,.96); border-radius: 3px; box-shadow: 0 8px 24px rgba(28,16,18,.28); }
 .legend { top: 24px; left: 28px; padding: 16px; }
 .action-panel { background: var(--surface); border-top-color: var(--border); padding: 22px 28px 24px; }
